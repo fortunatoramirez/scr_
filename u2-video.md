@@ -1,0 +1,43 @@
+## **Video - Unidad 2**
+
+---
+
+| **Objetivo** | Cada equipo deberá crear un video de máximo 3 minutos que explique de manera clara y concisa el tema asignado. La explicación debe incluir los puntos importantes indicados para cada tema, destacando aplicaciones biomédicas relevantes y la importancia del tema en redes de comunicación y transmisión de datos. |
+|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Duración del video**       | La duración máxima del video es de 3 minutos.                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Equipo**                   | Se requiere la participación homogénea y equitativa de todos los miembros en la realización y presentación del video.                                                                                                                                                                                                                                                        |
+| **Contenido**                | El video debe cubrir los puntos clave del tema asignado.                                                                                                                                                                                                                                                                                  |
+| **Formato**                  | Se permite cualquier formato audiovisual (exposición, animación, infografía, etc.) que el equipo decida emplear.                                                                                                                                                                                                                                                                               |
+| **Entrega**                  | Cada equipo subirá el video o el enlace del video a Moodle, si se coloca en Google Drive, recuerdar colocarlo de acceso público.                                                                                                                                                                                                                   |
+
+---
+
+**Equipos y Temas Asignados**  
+
+| **Equipo** | **Números de Control y Nombres**                           | **Tema**                                      | **Puntos a cubrir**                                                                                                                                                                                                                                                                                                              |
+|------------|------------------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Equipo 1** | 22210407 - Acosta Berrelleza Kenia Celeste<br>21212150 - Damian Arroyo Perla Guadalupe<br>22210425 - Perez Castillo Natalie Jaqueline | Modelo de referencia TCP/IP | Origen y estructura, capas, funciones y protocolos asociados, importancia en redes modernas. |
+| **Equipo 2** | 22210408 - Araujo Rodriguez Armando<br>20210777 - De La Cruz Bojorquez Kevin Dario<br>22212253 - Estrada Lopez Axel Gilberto | Protocolo UDP | Origen, características, transmisión sin conexión, uso en aplicaciones de baja latencia, importancia en redes biomédicas. |
+| **Equipo 3** | 23212183 - Campos Rivas Nathalia Alexa<br>23212205 - Leon Cruz Cesar Antonio<br>19210598 - Ayala Limon Andres Sebastian | Protocolo TCP | Origen, transmisión orientada a conexión, características, control de flujo y error, ejemplos de uso en aplicaciones biomédicas. |
+| **Equipo 4** | 22211761 - Montesinos Valencia Silvia<br>C22211273 - Hernandez Garcia Diego<br>23212226 - Ramirez Tapia Diana Sarahí | Protocolo IPv4 | Origen, características, formato del datagrama IP, Unidad Máxima de Transferencia (MTU), direccionamiento (clases, máscaras, subredes). |
+| **Equipo 5** | 22210409 - Badillo Cruz Jael<br>22210424 - Panizzi Hernandez Ashley Dayanna<br>22210798 - Tapia Garcia Jahzeel Abisai | Protocolo IPv6 | Origen, mejoras sobre IPv4, tamaño de direcciones, estructura, beneficios para IoT y aplicaciones en salud. |
+| **Equipo 6** | 22212381 - Bonilla Martinez Nayeli<br>21212170 - Navarrete Avalos Jocelyn Yuliana<br>22210795 - Rincon Jimenez Tessa | Protocolos DHCP, ARP, DNS y HTTP | Propósito y funciones de cada protocolo, flujos de datos y comunicación en red, relevancia para la conectividad y administración de redes de dispositivos biomédicos. |
+| **Equipo 7** | 21212145 - Campoy Alegria Marco Antonio<br>21210469 - Preciado Hernandez Andres<br>22210431 - Villaseñor Lopez Diego David | IEEE 802.3 | Estándar Ethernet, características de transmisión, tipos de cables, aplicaciones biomédicas en redes alámbricas hospitalarias. |
+| **Equipo 8** | 19212383 - Castro Reyes Angel Sebastian<br>20211995 - Ruz Garcia Dante Ivann<br>20211983 - Mendivil Ramirez Frida Daniela | IEEE 802.11 | Estándar Wi-Fi, características de transmisión inalámbrica, frecuencias, seguridad y aplicaciones en entornos hospitalarios. |
+| **Equipo 9** | 22211757 - Gonzalez Sanchez Paola<br>C19211840 - Preciado Amezquita Carlos Samuel<br>22210793 - Ortiz Quintero Henry | IEEE 802.15 y IEEE 802.16 | Estándares para redes personales (WPAN) y de área metropolitana (WMAN), características y aplicaciones en dispositivos de salud. |
+| **Equipo 10** | 22210415 - Hernandez Ruiz Celia Lizette<br>22210417 - Juarez Salazar Angel Eduardo<br>21212173 - Ramirez Diaz Cesar Andres | WPAN, WBAN y WRAN | Definición y características de cada red, ejemplos de aplicaciones en salud (monitoreo de signos vitales, comunicación de dispositivos), beneficios y limitaciones. |
+| **Equipo 11** | 21212669 - Jacobo Mendoza Miroslava<br>21212749 - Romero Landa Alonso Alejandro<br>21212748 - Rivas Rosas Edgar Ivan | Pila de protocolos Bluetooth y BLE | Estructura de la pila de protocolos, Bluetooth vs BLE, aplicaciones en salud y comunicación de dispositivos. |
+| **Equipo 12** | 22210427 - Rivera Peñuelas Mariana<br>22210429 - Torres Velez Diego Raul<br>22210432 - Zamora Chon Michelle Ariadna | ZigBee | Características del protocolo, estructura de red, aplicaciones en monitoreo biomédico e IoT. |
+
+---
+
+**Rúbrica de Evaluación**
+
+| **Criterio de Evaluación**       | **Descripción**                                                                                                              | **Puntos** |
+|----------------------------------|------------------------------------------------------------------------------------------------------------------------------|------------|
+| **Cobertura de Contenidos**      | Todos los puntos clave del tema se abordaron correctamente, con la profundidad necesaria y relevancia biomédica cuando aplica. | 40         |
+| **Claridad y Organización**      | La estructura y claridad del video facilitan la comprensión, y cada miembro del equipo participa de manera equitativa.      | 20         |
+| **Originalidad y Creatividad**   | Uso de recursos visuales, gráficos o animaciones para facilitar la comprensión.                                              | 15         |
+| **Participación Equitativa**     | Todos los miembros del equipo participaron de forma homogénea y visible en el video.                                         | 15         |
+| **Calidad Técnica**              | Calidad de audio, imagen, y edición para asegurar un video profesional y fácil de seguir.                                    | 10         |
+| **Total**                        |                                                                                                                              | **100**    |
