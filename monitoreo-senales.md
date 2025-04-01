@@ -441,7 +441,7 @@ Este archivo define la estructura visual de la interfaz web:
 </head>
 
 <body>
-    <h2>Bioingeniería - Telecomunicaciones - Monitoreo y Control</h2>
+    <h2>Telecomunicaciones - Monitoreo y Control</h2>
     <div id="div_dato"></div>
     <div id="div_comando"></div>
     <div id="div_grafica"></div>
