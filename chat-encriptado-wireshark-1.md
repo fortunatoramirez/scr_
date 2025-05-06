@@ -683,10 +683,6 @@ Verás los bytes y su representación en ASCII.
 
 ---
 
-¡Perfecto! 🙌 Ahora viene la parte **más interesante**: los alumnos van a **modificar el código** para que los mensajes **se encripten** antes de ser enviados y se **desencripten** al recibirlos. Esto les permitirá comparar después en Wireshark cómo el **payload ya no es legible**.
-
----
-
 # 🔐 **PARTE 4: Modificar el cliente para encriptar los mensajes**
 
 ---
@@ -708,7 +704,7 @@ Verás los bytes y su representación en ASCII.
 * Codifica los datos en un formato que **no es legible fácilmente** pero sigue siendo reversible.
 * **NO es seguridad real**, pero sirve para **demostrar cómo cambia el payload**.
 
-(⚠️ Podrías pedir después a los alumnos más avanzados que implementen algo más robusto como AES).
+(más adelante se implementará algo más robusto como AES).
 
 ---
 
@@ -904,7 +900,7 @@ Esto ayuda a hacer pruebas mixtas fácilmente.
 
 # ✅ **Resultado esperado:**
 
-* Alumnos ven en Wireshark que **el payload ya no es legible.**
+* Ven en Wireshark que **el payload ya no es legible.**
 * El sistema sigue funcionando igual para los usuarios (porque el cliente desencripta).
 * Confirmación de que **el servidor actúa solo como "reenvío ciego"** y **no necesita desencriptar nada.**
 
@@ -912,7 +908,511 @@ Esto ayuda a hacer pruebas mixtas fácilmente.
 
 ---
 
-👉 **¿Pasamos ahora a la Parte 5 (nueva captura y comparación + análisis final), o quieres que prepare algún material extra como sugerencias para migrar a un cifrado más fuerte (AES, etc.) o detalles gráficos del flujo encriptado?**
+
+# 🔍 **PARTE 5: Nueva captura, comparación y análisis final**
+
+---
+
+## 🎯 **Objetivo:**
+
+* Capturar nuevamente el tráfico en Wireshark con los mensajes **encriptados**.
+* Comparar **antes y después** (sin cifrado vs con cifrado).
+* Reflexionar sobre lo aprendido.
+* Mjorar la seguridad con cifrado avanzado.
+
+---
+
+---
+
+## 🚩 **Paso 1: Captura nueva en Wireshark**
+
+Repite exactamente el procedimiento de la Parte 2:
+
+1️⃣ Inicia Wireshark y selecciona la interfaz correcta.
+
+2️⃣ Aplica el filtro:
+
+```
+tcp.port == 5001
+```
+
+3️⃣ Envía algunos mensajes usando la versión **modificada** del cliente (con encriptación).
+
+4️⃣ Detén la captura y **guarda** el archivo, por ejemplo:
+`captura_mensajes_encriptados.pcapng`
+
+---
+
+---
+
+## 🚩 **Paso 2: Comparar antes y después**
+
+🔍 Abre **ambas capturas** (la primera y la nueva).
+
+### 📊 **ANTES (sin cifrado):**
+
+En la sección **Data (Payload):**
+
+```
+Juan: Hola mundo
+```
+
+👉 Directamente legible.
+
+---
+
+### 🔐 **AHORA (encriptado):**
+
+En la sección **Data (Payload):**
+
+```
+Sm9hbjogSG9sYSBtdW5kbw==
+```
+
+👉 Ya **no es legible a simple vista**.
+
+💬 **Bitácora:**
+
+* Incluye capturas de pantalla comparativas (antes/después).
+* Explica la diferencia visual y conceptual.
+
+---
+
+---
+
+## 🚩 **Paso 3: Reflexión profunda**
+
+**Pregunta:**
+
+> 🔎 **¿Cómo decodificarías el mensaje sin la ayuda de Wireshark, teniendo únicamente los ceros y unos capturados?**
+
+### ✍️ **Respuesta sugerida:**
+
+1️⃣ **Obtener el paquete en formato binario:**
+
+* En Wireshark, puedes **ver los ceros y unos** usando:
+
+  * Menú: `Ver > Opciones de visualización de bytes > Mostrar como: binario`
+
+* O bien, exportando los datos capturados y visualizándolos en un editor hexadecimal/bits.
+
+2️⃣ **Analizar la estructura del paquete:**
+
+* Los datos se encapsulan así:
+
+  * **Ethernet Header (14 bytes)**
+  * **IP Header (mínimo 20 bytes)**
+  * **TCP Header (mínimo 20 bytes)**
+  * **Payload (tu mensaje encriptado)**
+
+3️⃣ **Ubicar la parte del payload:**
+
+* Sabiendo los tamaños de los headers, puedes **saltarte** los primeros:
+
+  Ejemplo (simplificado):
+
+  ```
+  [14 bytes Ethernet]
+  [20 bytes IP]
+  [20 bytes TCP]
+  [PAYLOAD: empieza aquí]
+  ```
+
+* Una vez ubicado el payload, debes **convertir esos bits** a texto:
+
+  * Paso 1: Convertir los bits a bytes.
+  * Paso 2: Interpretarlos como **Base64 (ASCII)**.
+  * Paso 3: Decodificar Base64 para recuperar el mensaje original.
+
+### ✅ **Conclusión:**
+
+Aunque los mensajes se ven en Wireshark en **hexadecimal o texto**, si solo tienes **ceros y unos**, necesitas:
+
+* Conocer bien la estructura del paquete.
+* Separar los headers.
+* Extraer y convertir la **carga útil** manualmente.
+
+Esto muestra por qué **la encriptación real es vital**: aunque no uses Wireshark, alguien con habilidades puede reconstruir el mensaje si está solo "codificado" y no encriptado fuerte.
+
+---
+
+---
+
+## 🚩 **Paso 4: Explicación para cifrado avanzado**
+
+👉 **Propuesta: utilizar AES (Advanced Encryption Standard).**
+
+### 🔑 ¿Por qué AES?
+
+AES es un **algoritmo simétrico seguro** que usa una clave para cifrar y descifrar. A diferencia de Base64 (que solo codifica), AES **realmente protege la información**.
+
+---
+
+### 🔧 **Código ejemplo de cifrado AES en Java**
+
+En la parte superior:
+
+```java
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+```
+
+Clave fija para pruebas (16 bytes):
+
+```java
+// La clave debe tener 16 bytes (128 bits)
+private static final String CLAVE_SECRETA = "1234567890abcdef";
+```
+
+---
+
+#### 🚩 **Método para encriptar:**
+
+```java
+public static String encriptarAES(String mensaje) throws Exception {
+    SecretKeySpec secretKey = new SecretKeySpec(CLAVE_SECRETA.getBytes(), "AES");
+    Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+    byte[] encryptedBytes = cipher.doFinal(mensaje.getBytes());
+    return Base64.getEncoder().encodeToString(encryptedBytes);
+}
+```
+
+---
+
+#### 🚩 **Método para desencriptar:**
+
+```java
+public static String desencriptarAES(String mensajeEncriptado) throws Exception {
+    SecretKeySpec secretKey = new SecretKeySpec(CLAVE_SECRETA.getBytes(), "AES");
+    Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+    cipher.init(Cipher.DECRYPT_MODE, secretKey);
+    byte[] decodedBytes = Base64.getDecoder().decode(mensajeEncriptado);
+    byte[] decryptedBytes = cipher.doFinal(decodedBytes);
+    return new String(decryptedBytes);
+}
+```
+
+---
+
+#### 🚩 **Cómo usarlo en `enviar()`:**
+
+```java
+String completo = usuario + ": " + mensaje;
+String mensajeEncriptado = encriptarAES(completo);
+out.println(mensajeEncriptado);
+```
+
+---
+
+#### 🚩 **Cómo usarlo en `Monitor`:**
+
+```java
+String mensajeDesencriptado = desencriptarAES(msg);
+textArea.setText(textArea.getText() + "\n" + mensajeDesencriptado);
+```
+
+---
+
+### ⚠️ **Notas:**
+
+* **La clave debe ser secreta** y acordada entre los clientes.
+* Este ejemplo usa **AES/ECB**, pero en la práctica es más seguro usar **CBC con IV**.
+* El servidor **NO necesita cambiar** porque sigue solo reenviando los datos.
+
+---
+
+---
+
+## 🚩 **Esquema visual: cifrado avanzado**
+
+```
+CLIENTE A (mensaje plano) ──> AES Encriptado ──> Servidor ──> AES Encriptado ──> CLIENTE B (desencripta)
+```
+
+**Paquete en Wireshark:**
+
+```
+[Ethernet]
+[IP]
+[TCP]
+[Data: mensaje cifrado AES (ilegible y seguro)]
+```
+
+---
+
+---
+
+## 🚩 **Bitácora:**
+
+✅ Incluye:
+
+* Capturas de pantalla con el payload totalmente cifrado (ya NO legible en Base64).
+* Explicación de la implementación de AES.
+* Reflexión: ¿Qué problemas adicionales enfrentaste? ¿Qué aprendiste sobre seguridad real?
+
+---
+
+---
+
+# ✅ **Resultado esperado:**
+
+* Comparativa clara **antes/después** mostrando cómo evolucionó la seguridad.
+* Alumnos entienden la diferencia entre **codificar (Base64)** y **cifrar realmente (AES)**.
+* Implementar el cifrado avanzado.
+
+---
+
+
+
+## 📊 **Anexo 1: Payload cifrado con AES en Wireshark**
+
+Cuando usas **AES + Base64**, el mensaje en Wireshark ahora aparece algo así (simulado):
+
+### 🔹 **Antes (sin cifrar):**
+
+Payload (Data):
+
+```
+4a 75 61 6e 3a 20 48 6f 6c 61 20 6d 75 6e 64 6f
+Juan: Hola mundo
+```
+
+👁️ *Visible y legible.*
+
+---
+
+### 🔹 **Con Base64:**
+
+Payload (Data):
+
+```
+Sm9hbjogSG9sYSBtdW5kbw==
+```
+
+👁️ *Codificado, pero aún se puede revertir fácilmente si alguien sabe que es Base64.*
+
+---
+
+### 🔹 **Con AES (encriptado + Base64):**
+
+Payload (Data):
+
+```
+R3d0YXp0Y0pxZ0VqQnZ2c3VMdXh6dUlEYmJDN0hkbExnZnJ0RA==
+```
+
+👁️ *Ilegible y aunque alguien intente decodificar Base64, obtendrá solo datos binarios en bruto, no el mensaje.*
+
+---
+
+**En Wireshark:**
+
+```
+Data (32 bytes)
+    52 33 64 30 59 7a 30 77 59 30 78 70 5a 43 78 6c  9 bytes...
+    (R3d0YXp0Y... )
+```
+
+🔒 Ahora el mensaje es realmente **cifrado**: aunque un atacante lo capture, no podrá obtener el texto sin conocer la clave y el algoritmo exacto.
+
+---
+
+
+
+# 🛠️ **ANEXO 2: Explicación técnica de Base64 y AES**
+
+---
+
+## 🔢 **1️⃣ ¿Qué es Base64 y cómo funciona?**
+
+### 🔹 **Definición:**
+
+**Base64** es un método para **codificar datos binarios** (como texto, imágenes, etc.) en **caracteres ASCII** (texto plano). Esto hace que los datos sean **seguros para transmitir** por canales que solo aceptan texto (como HTTP o ciertos protocolos).
+
+➡️ **Importante:**
+
+* **Base64 NO es encriptación**: solo convierte datos binarios en un formato legible (pero no seguro).
+* **Puede ser fácilmente revertido** para recuperar el dato original.
+
+---
+
+### 🔹 **¿Cómo funciona?**
+
+* Base64 toma grupos de **3 bytes (24 bits)** y los divide en **4 grupos de 6 bits**.
+* Cada grupo de 6 bits se mapea a un **carácter ASCII** de la siguiente tabla (64 símbolos):
+
+| Valor (decimal) | Símbolo | ... |
+| --------------- | ------- | --- |
+| 0               | A       |     |
+| 1               | B       |     |
+| ...             | ...     |     |
+| 62              | +       |     |
+| 63              | /       |     |
+
+💡 Si el número de bytes **no es múltiplo de 3**, se añaden símbolos `=` como **relleno**.
+
+---
+
+### 🔹 **Ejemplo práctico:**
+
+**Mensaje original:**
+
+```
+Hola
+```
+
+**En binario:**
+
+```
+H: 01001000
+o: 01101111
+l: 01101100
+a: 01100001
+```
+
+👉 Tomamos los 24 bits del primer bloque (`Hola` → `Ho`):
+
+```
+01001000 01101111 01101100
+```
+
+Dividido en grupos de 6 bits:
+
+```
+010010 000110 111101 101100
+```
+
+Mapeados a caracteres Base64 (simplificado):
+
+```
+SGVs
+```
+
+---
+
+### ✅ **Conclusión:**
+
+✔️ **Útil para:** convertir datos binarios en texto plano.
+❌ **No sirve para seguridad:** cualquiera puede **decodificar** el mensaje si lo intercepta.
+
+---
+
+---
+
+---
+
+## 🔐 **2️⃣ ¿Qué es AES y cómo funciona?**
+
+### 🔹 **Definición:**
+
+**AES (Advanced Encryption Standard)** es un **algoritmo de cifrado simétrico** usado mundialmente para **proteger datos**. Fue adoptado como estándar por el gobierno de EE.UU. y sigue siendo el cifrado estándar para proteger comunicaciones y datos sensibles.
+
+* Es **simétrico**: la misma clave se usa para **cifrar y descifrar**.
+* Usualmente opera con claves de:
+
+  * **128 bits** (16 bytes)
+  * 192 bits (24 bytes)
+  * 256 bits (32 bytes)
+
+---
+
+### 🔹 **¿Cómo funciona internamente (simplificado)?**
+
+1️⃣ **Preparación:**
+
+* El mensaje se divide en **bloques de 16 bytes**.
+* La clave se usa para generar una serie de **subclaves** (Key Expansion).
+
+2️⃣ **Rondas de transformación:**
+
+* Cada bloque pasa por **varias rondas** de operaciones:
+
+  * **SubBytes:** sustitución byte a byte usando una tabla (S-box).
+  * **ShiftRows:** reordenamiento de filas.
+  * **MixColumns:** mezcla matemática de columnas.
+  * **AddRoundKey:** se combina con la subclave.
+
+3️⃣ **Última ronda:**
+
+* Igual que las demás pero sin la operación MixColumns.
+
+🔄 **Desencriptar:** sigue los mismos pasos **en reversa** para recuperar el mensaje original.
+
+---
+
+### 🔹 **¿Qué modos de operación existen?**
+
+* **ECB (Electronic Codebook):** cifra cada bloque **de forma independiente** (no recomendado para datos reales porque repite patrones).
+* **CBC (Cipher Block Chaining):** cada bloque cifrado depende del anterior (mucho más seguro).
+* **CTR, GCM, etc.:** otros modos más avanzados.
+
+➡️ En nuestra práctica, usamos **ECB por simplicidad**, pero **en el mundo real CBC o GCM son mucho más seguros.**
+
+---
+
+### 🔹 **Ejemplo conceptual:**
+
+* **Mensaje original:**
+
+```
+Juan: Hola mundo
+```
+
+* **Clave:**
+
+```
+1234567890abcdef
+```
+
+* **Proceso:**
+
+  1️⃣ El mensaje se transforma en bloques de 16 bytes.
+  2️⃣ Cada bloque pasa por las rondas de AES.
+  3️⃣ El resultado es una **cadena binaria cifrada**.
+  4️⃣ Para poder enviar el resultado cifrado fácilmente, lo codificamos en **Base64**.
+
+* **Resultado final (enviamos algo así):**
+
+```
+R3d0YXp0Y0pxZ0VqQnZ2c3VMdXh6dUlEYmJDN0hkbExnZnJ0RA==
+```
+
+---
+
+### ✅ **Conclusión:**
+
+✔️ **AES:** protección real de la información (sin la clave correcta, es muy difícil de romper).
+✔️ **Base64 (combinado con AES):** hace que el dato cifrado pueda enviarse como texto plano.
+🚩 **Importante:** Si solo usas Base64 **sin AES**, no estás protegiendo nada.
+
+---
+
+---
+
+## 🔗 **Comparativa rápida Base64 vs AES:**
+
+| Aspecto                   | Base64                           | AES                                 |
+| ------------------------- | -------------------------------- | ----------------------------------- |
+| ¿Encripta datos?          | ❌ No (solo codifica)             | ✅ Sí (cifra real)                   |
+| ¿Protege la privacidad?   | ❌ No                             | ✅ Sí                                |
+| ¿Se puede revertir fácil? | ✅ Sí (decodificar Base64)        | ❌ No sin la clave                   |
+| ¿Uso típico?              | Convertir datos binarios a texto | Proteger datos sensibles            |
+| ¿Necesita clave?          | ❌ No                             | ✅ Sí                                |
+| Seguridad                 | 🔓 Ninguna                       | 🔐 Muy alta (si se implementa bien) |
+
+---
+
+---
+
+# 📝 **Consejo para los equipos:**
+
+* **Para la demostración de la práctica:**
+  ✔️ Base64 es suficiente para demostrar la diferencia entre texto plano y codificado.
+
+* **Para encriptar realmente:**
+  🔐 Implementen AES + Base64 para una **protección real** y muestren que el payload en Wireshark **no solo es ilegible**, sino realmente cifrado.
+
 
 
 
