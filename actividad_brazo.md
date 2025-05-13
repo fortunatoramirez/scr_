@@ -12,7 +12,7 @@ Cada equipo será responsable de un bloque específico del sistema. Todos los bl
 
 ### 🔍 Diagrama del sistema distribuido
 
-![Diagrama del sistema](images/diagrama.png)
+![Diagrama del sistema](images/actividad_brazo.png)
 
 ---
 
