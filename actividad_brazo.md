@@ -12,29 +12,7 @@ Cada equipo será responsable de un bloque específico del sistema. Todos los bl
 
 ### 🔍 Diagrama del sistema distribuido
 
-```
-     +----------------------+     HTTPS/WebSocket     +-----------------------+
-     |  Cliente Web (HTML) |------------------------>|                       |
-     +----------------------+                        |                       |
-                                                    |                       |
-     +----------------------+     HTTPS/WebSocket     |                       |
-     | Cliente Python GUI   |------------------------>|                       |
-     +----------------------+                        |     Servidor Node.js  |
-                                                    |                       |
-     +----------------------+     HTTPS/WebSocket     |                       |
-     | Cliente OpenCV       |------------------------>|                       |
-     +----------------------+                        |                       |
-                                                    +-----------+-----------+
-                                                                |
-                                                           HTTP/Socket
-                                                                |
-                                                        +-------v--------+
-                                                        |     ESP32      |
-                                                        | +-------------+|
-                                                        | | Servomotores||
-                                                        | +-------------+|
-                                                        +----------------+
-```
+![Diagrama del sistema](images/diagrama.png)
 
 ---
 
